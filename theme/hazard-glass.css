@@ -449,9 +449,10 @@ ul.filterList span.link:hover {
     color: var(--hg-text);
 }
 
+/* sublinhado âmbar via sombra interna: a borda era cortada pelo header de altura fixa */
 .tab-menu li.selected a {
     background: transparent;
-    border-bottom-color: var(--hg-amber);
+    box-shadow: inset 0 -2px 0 var(--hg-amber);
     color: var(--hg-text);
 }
 
