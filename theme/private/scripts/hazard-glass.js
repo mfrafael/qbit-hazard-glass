@@ -147,8 +147,36 @@
             .join("");
     });
 
-    // a faixa muda a altura do topo: o MochaUI precisa recalcular as colunas
-    window.addEventListener("load", () => {
-        window.MochaUI?.Desktop?.setDesktopSize?.();
-    });
+    // Proteção: às vezes o painel de detalhes abre ocupando quase toda a coluna
+    // (o MochaUI dá a sobra de altura ao painel mais alto). Uma vez por carga,
+    // depois que os dados chegam, se o painel passar de 60% da coluna, volta
+    // para a altura salva pela própria WebUI (properties_height_rel) ou 40%.
+    let rebalanced = false;
+    const rebalance = () => {
+        if (rebalanced)
+            return;
+        const list = document.getElementById("transferList");
+        const props = document.getElementById("propertiesPanel");
+        const column = document.getElementById("mainColumn");
+        if (!list || !props || !column || column.classList.contains("invisible"))
+            return;
+        rebalanced = true;
+
+        const listH = Number.parseInt(list.style.height, 10);
+        const propsH = Number.parseInt(props.style.height, 10);
+        if (!(listH >= 0) || !(propsH > 0)) // painel recolhido ou sem altura fixa
+            return;
+        const total = listH + propsH;
+        const max = Math.round(total * 0.6);
+        if (propsH <= max)
+            return;
+
+        const rel = Number(localStorage.getItem("properties_height_rel"));
+        const saved = ((rel > 0) && (rel < 0.6)) ? Math.round(rel * window.innerHeight) : 0;
+        const target = Math.min(saved || Math.round(total * 0.4), max);
+        list.style.height = `${total - target}px`;
+        props.style.height = `${target}px`;
+        (window.MUI ?? window.MochaUI)?.panelHeight?.("mainColumn");
+    };
+    window.addEventListener("hazardglass:statuscounts", () => setTimeout(rebalance, 300));
 })();
