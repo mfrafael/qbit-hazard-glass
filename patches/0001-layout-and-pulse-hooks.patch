@@ -42,7 +42,7 @@ diff -ruN a/private/scripts/client.js b/private/scripts/client.js
 +            onResize: window.qBittorrent.Misc.createDebounceHandler(500, (e) => {
 +                saveColumnSizes();
 +            }),
-+            width: Number(localPreferences.get("hg_properties_width", 470)),
++            width: Number(localPreferences.get("hg_properties_width", 520)),
 +            resizeLimit: [320, 1400]
 +        });
      };
