@@ -2,7 +2,7 @@
 
 Tema para a WebUI do qBittorrent: vidro fosco (Acrylic) com toques de console sci-fi
 (Hazard), uma faixa "Pulse" no topo com velocidades, ratio, espaço livre e contagem de
-torrents, e o painel de detalhes do torrent numa coluna à direita.
+torrents, e o painel de detalhes do torrent embaixo, como na original.
 
 Não é uma WebUI nova: é a WebUI oficial da versão alvo do qBittorrent com o tema por cima.
 Todas as funções da original continuam lá (adicionar torrent, menus, categorias/tags,
@@ -12,7 +12,7 @@ Opções, RSS, busca, log, traduções).
 
 ```
 WebUI oficial (tag do qBittorrent, em QBT_TAG)
-  + patches/*.patch          ajustes mínimos no HTML/JS (coluna à direita, ganchos da Pulse)
+  + patches/*.patch          ajustes mínimos no HTML/JS (ganchos da Pulse)
   + theme/private/**         arquivos novos (scripts/hazard-glass.js)
   + theme/hazard-glass.css   anexado ao fim do style.css (vale nos diálogos também)
   = dist/webui/              pasta pronta para "Use alternative WebUI"

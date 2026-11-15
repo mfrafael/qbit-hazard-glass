@@ -13,9 +13,12 @@ legível de relance, sem perder nenhuma função da WebUI original.
   desfocadas) com toques *Hazard* (cantos cortados, rótulos em maiúsculas espaçadas, brilho
   só onde há dado vivo). Duas cores com papel fixo: **âmbar = ações/foco**,
   **ciano = dados**. Sempre escuro.
-- **Layout:** *File Browser* — filtros à esquerda, lista no centro, detalhes do torrent
-  numa **coluna larga à direita** (escolhida contra "painel embaixo" e "coluna que
-  expande"). As 5 abas originais (Geral, Trackers, Peers, Fontes HTTP, Conteúdo) ficam.
+- **Layout:** filtros à esquerda, lista no centro, detalhes do torrent no **painel de
+  baixo, como na WebUI original** (recolhível clicando na aba ativa). As 5 abas originais
+  ficam. *Histórico:* a 0.1.0 pôs os detalhes numa coluna larga à direita (estilo
+  *File Browser*); no uso real a lista perdeu quase todas as colunas (só cabia até
+  "Down Speed") e o Conteúdo cortava a Prioridade — a lista precisa da largura toda,
+  então voltamos ao painel de baixo.
 - **Faixa Pulse** no topo (influência do *Pulse Dashboard*): download e upload com
   mini-gráfico, ratio global, espaço livre + conexão, contagem por estado.
 - Referências: galeria ps5-homebrew-ui (designs *File Browser* e *Pulse Dashboard*, temas

@@ -1,0 +1,49 @@
+diff -ruN a/private/index.html b/private/index.html
+--- a/private/index.html	2026-11-15 04:22:14.906352220 +0000
++++ b/private/index.html	2026-11-15 04:36:32.280846551 +0000
+@@ -45,6 +45,7 @@
+     <script defer src="scripts/contextmenu.js?locale=${LANG}&v=${CACHEID}"></script>
+     <script defer src="scripts/pathAutofill.js?v=${CACHEID}"></script>
+     <script defer src="scripts/statistics.js?v=${CACHEID}"></script>
++    <script defer src="scripts/hazard-glass.js?v=${CACHEID}"></script>
+ </head>
+ 
+ <body>
+@@ -172,6 +173,7 @@
+                     </select>
+                 </div>
+             </div>
++            <div id="hgPulse" aria-label="Pulse"></div>
+         </div>
+         <div id="pageWrapper">
+         </div>
+diff -ruN a/private/scripts/client.js b/private/scripts/client.js
+--- a/private/scripts/client.js	2026-11-15 04:22:14.906930440 +0000
++++ b/private/scripts/client.js	2026-11-15 04:36:32.280564651 +0000
+@@ -693,9 +693,11 @@
+         return added;
+     };
+ 
++    const hazardGlassStatusCounts = {}; // Hazard Glass: counts for the Pulse strip
+     const updateFilter = (filter, filterTitle) => {
+         const filterEl = document.getElementById(`${filter}_filter`);
+         const filterTorrentCount = torrentsTable.getFilteredTorrentsNumber(filter, CATEGORIES_ALL, TAGS_ALL, TRACKERS_ALL);
++        hazardGlassStatusCounts[filter] = filterTorrentCount;
+         if (useAutoHideZeroStatusFilters) {
+             const hideFilter = (filterTorrentCount === 0) && (filter !== "all");
+             if (filterEl.classList.toggle("invisible", hideFilter))
+@@ -1178,10 +1180,13 @@
+                                 serverState[k] = tmp[k];
+                             }
+                             processServerState();
++                            window.dispatchEvent(new CustomEvent("hazardglass:serverstate", { detail: { ...serverState } })); // Hazard Glass
+                         }
+ 
+-                        if (updateStatuses)
++                        if (updateStatuses) {
+                             updateFiltersList();
++                            window.dispatchEvent(new CustomEvent("hazardglass:statuscounts", { detail: { ...hazardGlassStatusCounts } })); // Hazard Glass
++                        }
+ 
+                         if (updateCategories) {
+                             updateCategoryList();
