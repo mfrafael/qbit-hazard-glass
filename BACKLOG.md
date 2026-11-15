@@ -6,10 +6,10 @@ por cabeçalho, e o `tools/build.sh` capaz de remontar sobre uma versão nova do
 
 ## Agora (0.x)
 - [x] Primeiro teste real: Pulse com dados; coluna da direita testada e descartada
-- [ ] Conferir painel de baixo (abas, recolher, arrastar a divisória)
-- [ ] Passar por todas as telas: diálogos (adicionar torrent, renomear, mover, categorias,
-      tags), menus de contexto, Opções, Search, RSS, Log, Estatísticas
-- [ ] Barras de peças/disponibilidade (canvas com cores fixas no piecesbar.js) → ciano/âmbar
+- [x] Conferir painel de baixo (abas, Content com prioridade)
+- [x] Menus de contexto (botão direito) e diálogo de adicionar torrent — ok no uso real
+- [ ] Conferir o resto quando usar: Opções, renomear/mover, Search, RSS, Log, Estatísticas
+- [x] Barras de peças/disponibilidade (patch 0002): âmbar baixando, ciano completo
 - [ ] Ícones da toolbar/filtros: avaliar se combinam ou se trocamos por um conjunto próprio
 - [x] Repor CSP/COOP/Referrer-Policy por cabeçalho customizado na instalação
 

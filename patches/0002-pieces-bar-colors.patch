@@ -1,0 +1,28 @@
+diff -ruN a/private/scripts/piecesbar.js b/private/scripts/piecesbar.js
+--- a/private/scripts/piecesbar.js	2026-11-15 04:40:14.785795003 +0000
++++ b/private/scripts/piecesbar.js	2026-11-15 04:40:14.798898348 +0000
+@@ -169,8 +169,8 @@
+ 
+         constructor(pieces = [], styles = {}) {
+             super({
+-                downloadingColor: "hsl(110deg 94% 27%)",
+-                haveColor: "hsl(210deg 55% 55%)",
++                downloadingColor: "hsl(47deg 100% 62%)", // Hazard Glass: amber
++                haveColor: "hsl(189deg 100% 57%)", // Hazard Glass: cyan
+                 ...styles
+             });
+             this.#pieces = Array.isArray(pieces) ? pieces : [];
+@@ -360,9 +360,10 @@
+             // Use HSL interpolation for smooth gradient
+             // bgColor: hsl(0, 0%, 50%) - gray
+             // targetColor: hsl(210, 55%, 55%) - blue
+-            const hue = 210 * normalizedValue; // 0 -> 210
+-            const saturation = 55 * normalizedValue; // 0% -> 55%
+-            const lightness = 50 + (5 * normalizedValue); // 50% -> 55%
++            // Hazard Glass: dark slate (no peers) -> cyan (max peers)
++            const hue = 225 - (36 * normalizedValue); // 225 -> 189
++            const saturation = 15 + (85 * normalizedValue); // 15% -> 100%
++            const lightness = 22 + (35 * normalizedValue); // 22% -> 57%
+ 
+             this._ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+             this._ctx.fillRect(start, 0, width, this._canvasEl.height);
