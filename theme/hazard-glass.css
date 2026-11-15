@@ -1,0 +1,539 @@
+
+/* ===================================================================== */
+/* Hazard Glass — tema para a WebUI do qBittorrent                       */
+/* Anexado ao fim do style.css pelo tools/build.sh (vale também dentro   */
+/* dos diálogos, que são iframes com o próprio style.css).               */
+/* Regra: não mexer em margin/padding/width de colunas e painéis — o     */
+/* MochaUI calcula esses tamanhos em JS.                                 */
+/* ===================================================================== */
+
+/* ---------- tokens ---------- */
+:root:not(.dark),
+:root.dark {
+    --hg-bg: #07090f;
+    --hg-blob-1: #2b3bd6;
+    --hg-blob-2: #0e6f8a;
+    --hg-blob-3: #6b4a0a;
+    --hg-panel: rgb(255 255 255 / 4.5%);
+    --hg-panel-2: rgb(255 255 255 / 7%);
+    --hg-popup: #111622;
+    --hg-line: rgb(160 190 230 / 20%);
+    --hg-hair: rgb(255 255 255 / 6%);
+    --hg-text: #e6ebf5;
+    --hg-muted: #8d97b0;
+    --hg-amber: #ffd23f;
+    --hg-cyan: #22e1ff;
+    --hg-cyan-soft: rgb(34 225 255 / 9%);
+    --hg-red: #ff5c6c;
+    --hg-green: #3ddc97;
+    --hg-cut: 10px;
+    --hg-font: "Inter", "Segoe UI", system-ui, sans-serif;
+    --hg-mono: "JetBrains Mono", "Cascadia Mono", ui-monospace, monospace;
+
+    /* variáveis da WebUI original, remapeadas (o tema é sempre escuro) */
+    --color-accent-blue: var(--hg-cyan);
+    --color-text-blue: var(--hg-cyan);
+    --color-text-orange: var(--hg-amber);
+    --color-text-red: var(--hg-red);
+    --color-text-green: var(--hg-green);
+    --color-text-white: #04161c;
+    --color-text-disabled: #5c6580;
+    --color-text-default: var(--hg-text);
+    --color-background-primary: #0b0e16;
+    --color-background-blue: #1fb8d6;
+    --color-background-popup: var(--hg-popup);
+    --color-background-default: #161c2a;
+    --color-background-hover: #1b3542;
+    --color-border-blue: var(--hg-cyan);
+    --color-border-default: var(--hg-line);
+    --color-icon-hover: none;
+
+    color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+body {
+    font-family: var(--hg-font);
+    color: var(--hg-text);
+}
+
+/* página principal: fundo com manchas desfocadas + grade de pontos */
+body:has(#desktop) {
+    background: var(--hg-bg);
+}
+
+body:has(#desktop)::before {
+    background:
+        radial-gradient(40vmax 40vmax at 8% 0%, var(--hg-blob-1), transparent 60%),
+        radial-gradient(45vmax 45vmax at 100% 35%, var(--hg-blob-2), transparent 60%),
+        radial-gradient(35vmax 35vmax at 45% 110%, var(--hg-blob-3), transparent 60%);
+    content: "";
+    filter: blur(40px);
+    inset: 0;
+    opacity: 0.38;
+    pointer-events: none;
+    position: fixed;
+    z-index: 0;
+}
+
+body:has(#desktop)::after {
+    background-image: radial-gradient(rgb(255 210 63 / 11%) 1.1px, transparent 1.3px);
+    background-size: 22px 22px;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: fixed;
+    z-index: 0;
+}
+
+#desktop {
+    background: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+/* ---------- topo: menu + toolbar ---------- */
+#desktopHeader {
+    background: rgb(7 9 15 / 55%);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--hg-line);
+}
+
+#desktopNavbar {
+    background: transparent;
+}
+
+#desktopNavbar a,
+#desktopNavbar > ul > li > a {
+    color: var(--hg-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+}
+
+#desktopNavbar > ul > li > a:hover,
+#desktopNavbar li:hover > a {
+    background: transparent;
+    color: var(--hg-amber);
+}
+
+#desktopNavbar li ul {
+    background: var(--hg-popup);
+    border: 1px solid var(--hg-line);
+    box-shadow: 0 12px 30px rgb(0 0 0 / 45%);
+}
+
+#desktopNavbar ul li a:hover {
+    background: var(--hg-cyan-soft);
+    color: var(--hg-text);
+}
+
+#mochaToolbar {
+    background: transparent;
+    border: 0;
+}
+
+#mochaToolbar .divider {
+    border-color: var(--hg-line);
+}
+
+.mochaToolButton {
+    border-radius: 0;
+    padding: 3px;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+
+.mochaToolButton:hover {
+    background: rgb(255 210 63 / 10%);
+    box-shadow: inset 0 0 0 1px rgb(255 210 63 / 45%);
+}
+
+/* busca de torrents */
+#torrentsFilterInput {
+    background-color: var(--hg-panel);
+    border: 1px solid var(--hg-line);
+    border-radius: 0;
+    clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+    color: var(--hg-text);
+}
+
+#torrentsFilterInput:focus {
+    border-color: var(--hg-amber);
+    outline: none;
+}
+
+/* abas principais (Transfers / Search / RSS / Log) */
+#mainWindowTabs .tab-menu li a {
+    text-transform: uppercase;
+}
+
+/* ---------- faixa Pulse ---------- */
+#hgPulse {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1.4fr 1.4fr 0.8fr 1.1fr 1.3fr;
+    height: 96px;
+    padding: 10px 10px 8px;
+}
+
+#hgPulse:empty {
+    display: none;
+}
+
+.hg-tile {
+    background: var(--hg-panel);
+    border: 1px solid var(--hg-line);
+    clip-path: polygon(var(--hg-cut) 0, 100% 0, 100% calc(100% - var(--hg-cut)), calc(100% - var(--hg-cut)) 100%, 0 100%, 0 var(--hg-cut));
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+    overflow: hidden;
+    padding: 9px 12px;
+    position: relative;
+}
+
+.hg-label {
+    color: var(--hg-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.hg-big {
+    font-family: var(--hg-mono);
+    font-size: 22px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    position: relative;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.hg-big small {
+    color: var(--hg-muted);
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.hg-sub {
+    color: var(--hg-muted);
+    font-size: 11px;
+    overflow: hidden;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.hg-spark {
+    bottom: 0;
+    height: 46px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+}
+
+.hg-bar {
+    background: var(--hg-hair);
+    display: flex;
+    height: 8px;
+    margin-top: auto;
+    overflow: hidden;
+}
+
+.hg-bar span {
+    display: block;
+    height: 100%;
+}
+
+.hg-legend {
+    color: var(--hg-muted);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 11px;
+    gap: 2px 10px;
+}
+
+.hg-legend b {
+    color: var(--hg-text);
+    font-family: var(--hg-mono);
+    font-weight: 600;
+}
+
+.hg-legend i {
+    border-radius: 50%;
+    display: inline-block;
+    height: 7px;
+    margin-right: 4px;
+    width: 7px;
+}
+
+.hg-dot {
+    border-radius: 50%;
+    display: inline-block;
+    height: 7px;
+    margin-right: 6px;
+    vertical-align: 1px;
+    width: 7px;
+}
+
+/* ---------- área das colunas ---------- */
+#pageWrapper {
+    background: transparent;
+    border-color: transparent;
+}
+
+.column {
+    background: transparent;
+}
+
+.columnHandle {
+    background: transparent;
+    border: 0;
+    position: relative;
+}
+
+.columnHandle::after {
+    background: var(--hg-line);
+    content: "";
+    height: 28px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+}
+
+.columnHandle:hover::after {
+    background: var(--hg-amber);
+    box-shadow: 0 0 8px var(--hg-amber);
+}
+
+.panel {
+    background: var(--hg-panel);
+    backdrop-filter: blur(20px) saturate(140%);
+    border: 0;
+    box-shadow: inset 0 0 0 1px var(--hg-line);
+}
+
+.panel-header,
+#propertiesPanel_header {
+    background: rgb(255 255 255 / 3%);
+    border-bottom: 1px solid var(--hg-hair);
+}
+
+.horizontalHandle {
+    background: transparent;
+    border-color: transparent;
+}
+
+/* ---------- filtros (coluna da esquerda) ---------- */
+#Filters {
+    background: transparent;
+}
+
+.filterTitle {
+    color: var(--hg-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    padding-top: 10px;
+    text-transform: uppercase;
+}
+
+ul.filterList span.link {
+    border-left: 2px solid transparent;
+    color: var(--hg-text);
+    transition: background 0.15s, border-color 0.15s;
+}
+
+ul.filterList span.link:hover {
+    background: rgb(255 255 255 / 4%);
+    color: var(--hg-text);
+}
+
+.selectedFilter > span.link,
+.selectedFilter > span.link:hover {
+    background: var(--hg-cyan-soft);
+    border-left-color: var(--hg-cyan);
+    box-shadow: -6px 0 14px -8px var(--hg-cyan);
+    color: var(--hg-text);
+}
+
+/* ---------- tabelas ---------- */
+.dynamicTable {
+    background: transparent;
+}
+
+.dynamicTable th {
+    background: transparent;
+    border-color: var(--hg-hair);
+    color: var(--hg-muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.dynamicTable th.sorted {
+    color: var(--hg-amber);
+}
+
+.dynamicTable td {
+    border-color: var(--hg-hair);
+}
+
+.dynamicTableFixedHeaderDiv {
+    background: rgb(255 255 255 / 2%);
+}
+
+.altRowColors tbody tr:nth-child(odd of :not(.invisible)) {
+    background: rgb(255 255 255 / 1.8%);
+}
+
+.dynamicTableDiv table.dynamicTable tbody tr:hover,
+.dynamicTable tr:hover {
+    background: rgb(255 255 255 / 4%);
+    color: var(--hg-text);
+}
+
+.dynamicTableDiv table.dynamicTable tbody tr.selected {
+    background: var(--hg-cyan-soft);
+    box-shadow: inset 2px 0 0 var(--hg-cyan);
+    color: var(--hg-text);
+}
+
+/* ---------- abas do painel de detalhes ---------- */
+.tab-menu li a {
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--hg-muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.tab-menu li:hover a {
+    background: transparent;
+    color: var(--hg-text);
+}
+
+.tab-menu li.selected a {
+    background: transparent;
+    border-bottom-color: var(--hg-amber);
+    color: var(--hg-text);
+}
+
+/* o painel virou coluna: esconder o botão de recolher */
+#propertiesPanel_header .panel-collapse,
+#propertiesPanel_header .panel-expand {
+    display: none;
+}
+
+/* ---------- menus de contexto ---------- */
+.contextMenu,
+.contextMenu li ul {
+    background: var(--hg-popup);
+    border: 1px solid var(--hg-line);
+    box-shadow: 0 14px 34px rgb(0 0 0 / 50%);
+}
+
+.contextMenu li a {
+    color: var(--hg-text);
+}
+
+.contextMenu li a:hover {
+    background: var(--hg-cyan-soft);
+    color: var(--hg-text);
+}
+
+.contextMenu .separator {
+    border-color: var(--hg-hair);
+}
+
+/* ---------- campos e botões (inclusive nos diálogos) ---------- */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input:not([type]),
+select,
+textarea {
+    background-color: rgb(255 255 255 / 4%);
+    border: 1px solid var(--hg-line);
+    border-radius: 0;
+    color: var(--hg-text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--hg-amber);
+    outline: none;
+}
+
+button,
+input[type="button"],
+input[type="submit"] {
+    background: transparent;
+    border: 1px solid var(--hg-line);
+    border-radius: 0;
+    color: var(--hg-text);
+    font-weight: 600;
+}
+
+button:hover:not(:disabled),
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    border-color: var(--hg-amber);
+    box-shadow: inset 0 0 12px rgb(255 210 63 / 20%);
+    color: var(--hg-amber);
+}
+
+/* ---------- janelas (diálogos MochaUI) ---------- */
+.mochaTitlebar h3 {
+    color: var(--hg-text);
+    font-weight: 650;
+    letter-spacing: 0.04em;
+}
+
+.mochaContentWrapper,
+.mochaContent {
+    background: var(--hg-popup);
+}
+
+/* ---------- rodapé ---------- */
+#desktopFooterWrapper {
+    background: rgb(7 9 15 / 60%);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid var(--hg-line);
+}
+
+#desktopFooter {
+    color: var(--hg-muted);
+    font-family: var(--hg-font);
+}
+
+#desktopFooter td {
+    color: var(--hg-muted);
+}
+
+td.speedLabel,
+#freeSpaceOnDisk,
+#DHTNodes {
+    font-family: var(--hg-mono);
+}
+
+/* ---------- barra de rolagem ---------- */
+* {
+    scrollbar-color: rgb(160 190 230 / 25%) transparent;
+    scrollbar-width: thin;
+}

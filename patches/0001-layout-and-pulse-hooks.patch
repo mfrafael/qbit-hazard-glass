@@ -1,0 +1,126 @@
+diff -ruN a/private/index.html b/private/index.html
+--- a/private/index.html	2026-11-15 04:22:14.906352220 +0000
++++ b/private/index.html	2026-11-15 04:23:27.307016364 +0000
+@@ -45,6 +45,7 @@
+     <script defer src="scripts/contextmenu.js?locale=${LANG}&v=${CACHEID}"></script>
+     <script defer src="scripts/pathAutofill.js?v=${CACHEID}"></script>
+     <script defer src="scripts/statistics.js?v=${CACHEID}"></script>
++    <script defer src="scripts/hazard-glass.js?v=${CACHEID}"></script>
+ </head>
+ 
+ <body>
+@@ -172,6 +173,7 @@
+                     </select>
+                 </div>
+             </div>
++            <div id="hgPulse" aria-label="Pulse"></div>
+         </div>
+         <div id="pageWrapper">
+         </div>
+diff -ruN a/private/scripts/client.js b/private/scripts/client.js
+--- a/private/scripts/client.js	2026-11-15 04:22:14.906930440 +0000
++++ b/private/scripts/client.js	2026-11-15 04:22:52.768683090 +0000
+@@ -413,8 +413,8 @@
+     const saveColumnSizes = () => {
+         const filters_width = document.getElementById("Filters").getSize().x;
+         localPreferences.set("filters_width", filters_width);
+-        const properties_height_rel = document.getElementById("propertiesPanel").getSize().y / Window.getSize().y;
+-        localPreferences.set("properties_height_rel", properties_height_rel);
++        // Hazard Glass: the properties panel lives in a right-hand column, so its width is what is stored
++        localPreferences.set("hg_properties_width", document.getElementById("propertiesColumn").getSize().x);
+     };
+ 
+     window.addEventListener("resize", window.qBittorrent.Misc.createDebounceHandler(500, (e) => {
+@@ -442,6 +442,16 @@
+             id: "mainColumn",
+             placement: "main"
+         });
++        // Hazard Glass: right-hand column for the torrent properties
++        new MochaUI.Column({
++            id: "propertiesColumn",
++            placement: "right",
++            onResize: window.qBittorrent.Misc.createDebounceHandler(500, (e) => {
++                saveColumnSizes();
++            }),
++            width: Number(localPreferences.get("hg_properties_width", 470)),
++            resizeLimit: [320, 1400]
++        });
+     };
+ 
+     const buildSearchTab = () => {
+@@ -693,9 +703,11 @@
+         return added;
+     };
+ 
++    const hazardGlassStatusCounts = {}; // Hazard Glass: counts for the Pulse strip
+     const updateFilter = (filter, filterTitle) => {
+         const filterEl = document.getElementById(`${filter}_filter`);
+         const filterTorrentCount = torrentsTable.getFilteredTorrentsNumber(filter, CATEGORIES_ALL, TAGS_ALL, TRACKERS_ALL);
++        hazardGlassStatusCounts[filter] = filterTorrentCount;
+         if (useAutoHideZeroStatusFilters) {
+             const hideFilter = (filterTorrentCount === 0) && (filter !== "all");
+             if (filterEl.classList.toggle("invisible", hideFilter))
+@@ -1178,10 +1190,13 @@
+                                 serverState[k] = tmp[k];
+                             }
+                             processServerState();
++                            window.dispatchEvent(new CustomEvent("hazardglass:serverstate", { detail: { ...serverState } })); // Hazard Glass
+                         }
+ 
+-                        if (updateStatuses)
++                        if (updateStatuses) {
+                             updateFiltersList();
++                            window.dispatchEvent(new CustomEvent("hazardglass:statuscounts", { detail: { ...hazardGlassStatusCounts } })); // Hazard Glass
++                        }
+ 
+                         if (updateCategories) {
+                             updateCategoryList();
+@@ -1530,6 +1545,8 @@
+             document.getElementById("filtersColumn_handle").classList.remove("invisible");
+         }
+         document.getElementById("mainColumn").classList.remove("invisible");
++        document.getElementById("propertiesColumn").classList.remove("invisible"); // Hazard Glass
++        document.getElementById("propertiesColumn_handle").classList.remove("invisible"); // Hazard Glass
+         document.getElementById("torrentsFilterToolbar").classList.remove("invisible");
+ 
+         customSyncMainDataInterval = null;
+@@ -1546,6 +1563,8 @@
+         document.getElementById("filtersColumn").classList.add("invisible");
+         document.getElementById("filtersColumn_handle").classList.add("invisible");
+         document.getElementById("mainColumn").classList.add("invisible");
++        document.getElementById("propertiesColumn").classList.add("invisible"); // Hazard Glass
++        document.getElementById("propertiesColumn_handle").classList.add("invisible"); // Hazard Glass
+         document.getElementById("torrentsFilterToolbar").classList.add("invisible");
+         MochaUI.Desktop.setDesktopSize();
+     };
+@@ -1861,16 +1880,15 @@
+                     localPreferences.set("selected_properties_tab", tabID);
+                 }
+ 
+-                if (isAlreadySelected || this.isCollapsed)
++                // Hazard Glass: the panel is a column now; tabs never collapse it
++                if (this.isCollapsed)
+                     togglePropertiesPanel();
+             };
+ 
+             const lastUsedTab = localPreferences.get("selected_properties_tab", "propGeneralLink");
+             selectTab(lastUsedTab);
+ 
+-            const startCollapsed = localPreferences.get("properties_panel_collapsed", "false") === "true";
+-            if (startCollapsed)
+-                togglePropertiesPanel();
++            // Hazard Glass: always start expanded (the column replaces the collapsible bottom panel)
+ 
+             this.panelHeaderContentEl.addEventListener("click", (e) => {
+                 const selectedTab = e.target.closest("li");
+@@ -1888,8 +1906,8 @@
+             if (showFilesFilter)
+                 document.getElementById("torrentFilesFilterToolbar").classList.remove("invisible");
+         },
+-        column: "mainColumn",
+-        height: prop_h
++        column: "propertiesColumn", // Hazard Glass
++        height: null
+     });
+ 
+     // listen for changes to torrentsFilterInput
