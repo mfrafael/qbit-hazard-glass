@@ -3,8 +3,9 @@
 /* Hazard Glass — tema para a WebUI do qBittorrent                       */
 /* Anexado ao fim do style.css pelo tools/build.sh (vale também dentro   */
 /* dos diálogos, que são iframes com o próprio style.css).               */
-/* Regra: não mexer em margin/padding/width de colunas e painéis — o     */
-/* MochaUI calcula esses tamanhos em JS.                                 */
+/* Regra: NADA que mude medida (margin, padding, border-width, height,   */
+/* font-size, display) — o MochaUI calcula as alturas em JS e qualquer   */
+/* diferença faz um painel engolir o outro (bug da 0.2–0.4.2).           */
 /* ===================================================================== */
 
 /* ---------- tokens ---------- */
@@ -103,7 +104,7 @@ body:has(#desktop)::after {
 #desktopHeader {
     background: rgb(7 9 15 / 55%);
     backdrop-filter: blur(18px);
-    border-bottom: 1px solid var(--hg-line);
+    box-shadow: inset 0 -1px 0 var(--hg-line);
     position: relative;
     z-index: 100;
 }
@@ -115,7 +116,6 @@ body:has(#desktop)::after {
 #desktopNavbar a,
 #desktopNavbar > ul > li > a {
     color: var(--hg-muted);
-    font-size: 11.5px;
     font-weight: 600;
     letter-spacing: 0.06em;
 }
@@ -139,7 +139,7 @@ body:has(#desktop)::after {
 
 #mochaToolbar {
     background: transparent;
-    border: 0;
+    border-color: transparent;
 }
 
 #mochaToolbar .divider {
@@ -148,7 +148,6 @@ body:has(#desktop)::after {
 
 .mochaToolButton {
     border-radius: 0;
-    padding: 3px;
     transition: background 0.15s, box-shadow 0.15s;
 }
 
@@ -188,7 +187,7 @@ body:has(#desktop)::after {
 
 .columnHandle {
     background: transparent;
-    border: 0;
+    border-color: transparent;
     position: relative;
 }
 
@@ -211,14 +210,13 @@ body:has(#desktop)::after {
 .panel {
     background: var(--hg-panel);
     backdrop-filter: blur(20px) saturate(140%);
-    border: 0;
     box-shadow: inset 0 0 0 1px var(--hg-line);
 }
 
 .panel-header,
 #propertiesPanel_header {
     background: rgb(255 255 255 / 3%);
-    border-bottom: 1px solid var(--hg-hair);
+    border-bottom-color: var(--hg-hair);
 }
 
 /* divisória entre a lista e o painel de detalhes (arrastar) */
@@ -227,16 +225,8 @@ body:has(#desktop)::after {
     border-color: transparent;
 }
 
-.horizontalHandle .handleIcon {
-    background: var(--hg-line);
-    height: 2px;
-    margin-top: 2px;
-    width: 36px;
-}
-
-.horizontalHandle:hover .handleIcon {
-    background: var(--hg-amber);
-    box-shadow: 0 0 8px var(--hg-amber);
+.horizontalHandle:hover {
+    background: rgb(255 210 63 / 25%);
 }
 
 /* ---------- filtros (coluna da esquerda) ---------- */
@@ -246,17 +236,14 @@ body:has(#desktop)::after {
 
 .filterTitle {
     color: var(--hg-muted);
-    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.14em;
-    padding-top: 10px;
     text-transform: uppercase;
 }
 
 ul.filterList span.link {
-    border-left: 2px solid transparent;
     color: var(--hg-text);
-    transition: background 0.15s, border-color 0.15s;
+    transition: background 0.15s, box-shadow 0.15s;
 }
 
 ul.filterList span.link:hover {
@@ -267,8 +254,7 @@ ul.filterList span.link:hover {
 .selectedFilter > span.link,
 .selectedFilter > span.link:hover {
     background: var(--hg-cyan-soft);
-    border-left-color: var(--hg-cyan);
-    box-shadow: -6px 0 14px -8px var(--hg-cyan);
+    box-shadow: inset 2px 0 0 var(--hg-cyan);
     color: var(--hg-text);
 }
 
@@ -281,7 +267,6 @@ ul.filterList span.link:hover {
     background: transparent;
     border-color: var(--hg-hair);
     color: var(--hg-muted);
-    font-size: 10.5px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -318,10 +303,7 @@ ul.filterList span.link:hover {
 /* ---------- abas do painel de detalhes ---------- */
 .tab-menu li a {
     background: transparent;
-    border: 0;
-    border-bottom: 2px solid transparent;
     color: var(--hg-muted);
-    font-size: 10.5px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -440,13 +422,6 @@ td.speedLabel,
 }
 
 /* ---------- abas do topo (Transfers / Search / RSS / Log) ---------- */
-#mainWindowTabs .tab-menu li a {
-    border-bottom: 0;
-    box-shadow: inset 0 0 0 1px transparent;
-    margin-left: 4px;
-    padding: 5px 9px;
-}
-
 #mainWindowTabs .tab-menu li.selected a {
     background: rgb(255 210 63 / 10%);
     box-shadow: inset 0 0 0 1px var(--hg-amber), inset 0 0 12px rgb(255 210 63 / 18%);
@@ -456,17 +431,6 @@ td.speedLabel,
 #mainWindowTabs .tab-menu li.selected a img,
 #mainWindowTabs .tab-menu li:hover a img {
     filter: none;
-}
-
-/* ---------- abas do painel de detalhes: sem ícone, no estilo do tema ---------- */
-#propertiesTabs li a {
-    letter-spacing: 0.05em;
-    margin-left: 2px;
-    padding: 7px 7px 5px;
-}
-
-#propertiesTabs li a img {
-    display: none;
 }
 
 } /* :root */
