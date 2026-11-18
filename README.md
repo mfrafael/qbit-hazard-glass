@@ -11,6 +11,8 @@ release with a stylesheet on top and two tiny JS patches, so every feature keeps
 working: adding torrents, context menus, categories and tags, Options, RSS,
 search and logs. The layout is the stock one.
 
+**Does it look vibe-coded?** It is, and that is exactly the look I was after.
+
 **English only for now:** an alternative WebUI reads its translations from
 `translations/webui_<locale>.qm`, and the build does not produce those files
 yet. Other languages show the English text.
