@@ -1,6 +1,6 @@
-# gerados
+# build output and cached qBittorrent sources
 dist/
 .cache/
-# brainstorm/mockups (contêm dados reais do acervo, ficam fora do git)
+# local scratch folders
 .superpowers/
 mockups/

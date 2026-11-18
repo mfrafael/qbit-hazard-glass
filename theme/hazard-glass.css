@@ -1,11 +1,13 @@
 
 /* ===================================================================== */
-/* Hazard Glass — tema para a WebUI do qBittorrent                       */
-/* Anexado ao fim do style.css pelo tools/build.sh (vale também dentro   */
-/* dos diálogos, que são iframes com o próprio style.css).               */
-/* Regra: NADA que mude medida (margin, padding, border-width, height,   */
-/* font-size, display) — o MochaUI calcula as alturas em JS e qualquer   */
-/* diferença faz um painel engolir o outro (bug da 0.2–0.4.2).           */
+/* Hazard Glass: a theme for the qBittorrent WebUI                       */
+/* Appended to the end of style.css by tools/build.sh, so it also        */
+/* applies inside dialogs (iframes that load style.css on their own).    */
+/*                                                                       */
+/* RULE: never change geometry here (margin, padding, border width,      */
+/* height, font-size, display). MochaUI computes panel heights in JS and */
+/* any difference makes one panel swallow the other. Colour, background, */
+/* shadow and clip-path only.                                            */
 /* ===================================================================== */
 
 /* ---------- tokens ---------- */
@@ -16,7 +18,6 @@
     --hg-blob-2: #0e6f8a;
     --hg-blob-3: #6b4a0a;
     --hg-panel: rgb(255 255 255 / 4.5%);
-    --hg-panel-2: rgb(255 255 255 / 7%);
     --hg-popup: #111622;
     --hg-line: rgb(160 190 230 / 20%);
     --hg-hair: rgb(255 255 255 / 6%);
@@ -27,11 +28,10 @@
     --hg-cyan-soft: rgb(34 225 255 / 9%);
     --hg-red: #ff5c6c;
     --hg-green: #3ddc97;
-    --hg-cut: 10px;
     --hg-font: "Inter", "Segoe UI", system-ui, sans-serif;
     --hg-mono: "JetBrains Mono", "Cascadia Mono", ui-monospace, monospace;
 
-    /* variáveis da WebUI original, remapeadas (o tema é sempre escuro) */
+    /* the stock WebUI variables, remapped (the theme is always dark) */
     --color-accent-blue: var(--hg-cyan);
     --color-text-blue: var(--hg-cyan);
     --color-text-orange: var(--hg-amber);
@@ -52,9 +52,9 @@
     color-scheme: dark;
 }
 
-/* Tudo abaixo fica dentro de ":root { }" (CSS nesting) para ganhar
-   especificidade: Layout.css, Window.css e Tabs.css carregam DEPOIS do
-   style.css e venceriam regras de mesmo peso. */
+/* Everything below is nested in ":root { }" for extra specificity:
+   Layout.css, Window.css and Tabs.css load AFTER style.css and would win
+   rules of equal weight. */
 :root {
 
 /* ---------- base ---------- */
@@ -63,7 +63,7 @@ body {
     color: var(--hg-text);
 }
 
-/* página principal: fundo com manchas desfocadas + grade de pontos */
+/* main page: soft colour blobs + dot grid (dialogs keep a plain background) */
 body:has(#desktop) {
     background: var(--hg-bg);
 }
@@ -74,7 +74,6 @@ body:has(#desktop)::before {
         radial-gradient(45vmax 45vmax at 100% 35%, var(--hg-blob-2), transparent 60%),
         radial-gradient(35vmax 35vmax at 45% 110%, var(--hg-blob-3), transparent 60%);
     content: "";
-    filter: blur(40px);
     inset: 0;
     opacity: 0.38;
     pointer-events: none;
@@ -98,9 +97,9 @@ body:has(#desktop)::after {
     z-index: 1;
 }
 
-/* ---------- topo: menu + toolbar ---------- */
-/* o backdrop-filter cria um contexto de empilhamento: sem z-index, os menus
-   suspensos (File/Edit/View…) ficavam presos nele, por baixo das colunas */
+/* ---------- header: menu bar + toolbar ---------- */
+/* backdrop-filter creates a stacking context: without a z-index the
+   File/Edit/View… drop-downs ended up under the columns */
 #desktopHeader {
     background: rgb(7 9 15 / 55%);
     backdrop-filter: blur(18px);
@@ -156,7 +155,7 @@ body:has(#desktop)::after {
     box-shadow: inset 0 0 0 1px rgb(255 210 63 / 45%);
 }
 
-/* busca de torrents */
+/* torrent filter box */
 #torrentsFilterInput {
     background-color: var(--hg-panel);
     border: 1px solid var(--hg-line);
@@ -170,12 +169,12 @@ body:has(#desktop)::after {
     outline: none;
 }
 
-/* abas principais (Transfers / Search / RSS / Log) */
+/* main tabs (Transfers / Search / RSS / Log) */
 #mainWindowTabs .tab-menu li a {
     text-transform: uppercase;
 }
 
-/* ---------- área das colunas ---------- */
+/* ---------- columns and panels ---------- */
 #pageWrapper {
     background: transparent;
     border-color: transparent;
@@ -219,7 +218,7 @@ body:has(#desktop)::after {
     border-bottom-color: var(--hg-hair);
 }
 
-/* divisória entre a lista e o painel de detalhes (arrastar) */
+/* drag handle between the torrent list and the properties panel */
 .horizontalHandle {
     background: transparent;
     border-color: transparent;
@@ -229,7 +228,7 @@ body:has(#desktop)::after {
     background: rgb(255 210 63 / 25%);
 }
 
-/* ---------- filtros (coluna da esquerda) ---------- */
+/* ---------- filters (left column) ---------- */
 #Filters {
     background: transparent;
 }
@@ -258,7 +257,7 @@ ul.filterList span.link:hover {
     color: var(--hg-text);
 }
 
-/* ---------- tabelas ---------- */
+/* ---------- tables ---------- */
 .dynamicTable {
     background: transparent;
 }
@@ -300,7 +299,7 @@ ul.filterList span.link:hover {
     color: var(--hg-text);
 }
 
-/* ---------- abas do painel de detalhes ---------- */
+/* ---------- tabs ---------- */
 .tab-menu li a {
     background: transparent;
     color: var(--hg-muted);
@@ -314,14 +313,14 @@ ul.filterList span.link:hover {
     color: var(--hg-text);
 }
 
-/* sublinhado âmbar via sombra interna: a borda era cortada pelo header de altura fixa */
+/* amber underline as an inset shadow: a border would change the tab height */
 .tab-menu li.selected a {
     background: transparent;
     box-shadow: inset 0 -2px 0 var(--hg-amber);
     color: var(--hg-text);
 }
 
-/* ---------- menus de contexto ---------- */
+/* ---------- context menus ---------- */
 .contextMenu,
 .contextMenu li ul {
     background: var(--hg-popup);
@@ -342,7 +341,7 @@ ul.filterList span.link:hover {
     border-color: var(--hg-hair);
 }
 
-/* ---------- campos e botões (inclusive nos diálogos) ---------- */
+/* ---------- inputs and buttons (dialogs included) ---------- */
 input[type="text"],
 input[type="password"],
 input[type="number"],
@@ -381,7 +380,7 @@ input[type="submit"]:hover {
     color: var(--hg-amber);
 }
 
-/* ---------- janelas (diálogos MochaUI) ---------- */
+/* ---------- MochaUI windows (dialogs) ---------- */
 .mochaTitlebar h3 {
     color: var(--hg-text);
     font-weight: 650;
@@ -393,7 +392,7 @@ input[type="submit"]:hover {
     background: var(--hg-popup);
 }
 
-/* ---------- rodapé ---------- */
+/* ---------- status bar ---------- */
 #desktopFooterWrapper {
     background: rgb(7 9 15 / 60%);
     backdrop-filter: blur(18px);
@@ -415,13 +414,13 @@ td.speedLabel,
     font-family: var(--hg-mono);
 }
 
-/* ---------- barra de rolagem ---------- */
+/* ---------- scrollbars ---------- */
 * {
     scrollbar-color: rgb(160 190 230 / 25%) transparent;
     scrollbar-width: thin;
 }
 
-/* ---------- abas do topo (Transfers / Search / RSS / Log) ---------- */
+/* ---------- main tabs: selected one in amber ---------- */
 #mainWindowTabs .tab-menu li.selected a {
     background: rgb(255 210 63 / 10%);
     box-shadow: inset 0 0 0 1px var(--hg-amber), inset 0 0 12px rgb(255 210 63 / 18%);

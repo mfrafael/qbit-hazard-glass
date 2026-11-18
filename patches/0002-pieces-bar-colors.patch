@@ -1,6 +1,9 @@
-diff -ruN a/private/scripts/piecesbar.js b/private/scripts/piecesbar.js
---- a/private/scripts/piecesbar.js	2026-11-15 04:40:14.785795003 +0000
-+++ b/private/scripts/piecesbar.js	2026-11-15 04:40:14.798898348 +0000
+Pieces and availability bars in the theme colours: amber for pieces being
+downloaded, cyan for downloaded pieces; availability goes from slate (no
+peers) to cyan. These bars are drawn on a canvas, so CSS cannot reach them.
+
+--- a/private/scripts/piecesbar.js
++++ b/private/scripts/piecesbar.js
 @@ -169,8 +169,8 @@
  
          constructor(pieces = [], styles = {}) {

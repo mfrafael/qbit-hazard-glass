@@ -1,6 +1,9 @@
-diff -ruN a/private/scripts/client.js b/private/scripts/client.js
---- a/private/scripts/client.js	2026-11-18 06:00:52.663120912 +0000
-+++ b/private/scripts/client.js	2026-11-18 06:00:52.676774215 +0000
+Cap the saved height of the torrent properties panel at 60% of the window.
+The WebUI stores that height as a fraction of the window; a value close to 1
+makes the panel swallow the torrent list on every page load.
+
+--- a/private/scripts/client.js
++++ b/private/scripts/client.js
 @@ -1783,8 +1783,11 @@
          height: null
      });

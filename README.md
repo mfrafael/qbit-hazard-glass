@@ -1,58 +1,96 @@
 # Hazard Glass
 
-Tema para a WebUI do qBittorrent: vidro fosco (Acrylic) com toques de console sci-fi
-(Hazard). O layout é o da WebUI original; só o visual muda.
+A dark theme for the qBittorrent WebUI: frosted-glass panels over a deep
+blue/teal backdrop, sci-fi console accents, **amber for actions and focus**,
+**cyan for data**.
 
-Não é uma WebUI nova: é a WebUI oficial da versão alvo do qBittorrent com o tema por cima.
-Todas as funções da original continuam lá (adicionar torrent, menus, categorias/tags,
-Opções, RSS, busca, log, traduções).
+It is not a new WebUI. It is the **official WebUI** of a given qBittorrent
+release with a stylesheet on top and two tiny JS patches, so every feature keeps
+working: adding torrents, context menus, categories and tags, Options, RSS,
+search and logs. The layout is the stock one.
 
-## Como funciona
+**English only for now:** an alternative WebUI reads its translations from
+`translations/webui_<locale>.qm`, and the build does not produce those files
+yet. Other languages show the English text.
+
+## Install
+
+1. Download `hazard-glass-<version>-release-<qbt>.zip` from
+   [Releases](../../releases), matching your qBittorrent version.
+2. Unzip it somewhere the qBittorrent user can read, e.g. `/opt/hazard-glass/`.
+3. In **Tools → Options → WebUI**, tick **Use alternative WebUI** and point
+   it to the `webui` folder you just unzipped.
+   Headless setups can set the same in `qBittorrent.conf`:
+   `WebUI\AlternativeUIEnabled=true` and `WebUI\RootFolder=/opt/hazard-glass/webui`.
+4. Hard-reload the WebUI page (Ctrl+Shift+R).
+
+**To go back** to the stock WebUI, untick the option. If the folder disappears
+or has no `index.html`, `qbittorrent-nox` falls back to the stock WebUI on its
+own.
+
+### Keep the stock security headers
+
+With *any* alternative WebUI, qBittorrent **stops sending** its
+`Content-Security-Policy`, `Cross-Origin-Opener-Policy` and `Referrer-Policy`
+headers. To keep the same protection as the stock WebUI, enable
+**Options → WebUI → Add custom HTTP headers** with:
 
 ```
-WebUI oficial (tag do qBittorrent, em QBT_TAG)
-  + patches/*.patch          ajustes mínimos no JS (cores da barra de peças)
-  + theme/hazard-glass.css   anexado ao fim do style.css (vale nos diálogos também)
-  = dist/webui/              pasta pronta para "Use alternative WebUI"
+content-security-policy: default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; object-src 'none'; form-action 'self'; frame-src 'self' blob:; frame-ancestors 'self';
+cross-origin-opener-policy: same-origin
+referrer-policy: same-origin
 ```
 
-## Montar
+Write the header names in **lower case**: that way they replace the partial
+policy qBittorrent still sends, instead of adding a second header next to it.
+If the WebUI is served over HTTPS, add `upgrade-insecure-requests;` at the end
+of the policy, like the stock WebUI does.
+
+The theme loads nothing from outside your server: no web fonts, scripts or
+images.
+
+## Compatibility
+
+- qBittorrent **5.3.0** (other versions: build it yourself, see below).
+- A browser with CSS nesting and `:has()`: Chrome/Edge/Brave 120+,
+  Firefox 121+, Safari 17.2+.
+
+## Build it yourself
 
 ```sh
-tools/build.sh                 # usa a tag em QBT_TAG
-tools/build.sh release-5.4.0   # outra versão do qBittorrent
+tools/build.sh                  # qBittorrent version in QBT_TAG
+tools/build.sh release-5.4.0    # any other qBittorrent release tag
 ```
 
-Requisitos: `git`, `patch`, `bash`.
+Needs `bash`, `git` and `patch` (`zip` or `python3` for the release archive).
+Output: `dist/webui/` and `dist/hazard-glass-<version>-<tag>.zip`.
 
-## Instalar
-
-1. Copie `dist/webui/` para uma pasta que o usuário do qBittorrent consiga ler.
-2. Em **Tools → Options → WebUI**, marque **Use alternative WebUI** e aponte para essa pasta
-   (ou, no `qBittorrent.conf`: `WebUI\AlternativeUIEnabled=true` e `WebUI\RootFolder=<pasta>`).
-3. Recarregue a página (Ctrl+F5).
-
-**Voltar à WebUI padrão:** desmarque a opção. Se a pasta sumir ou estiver sem `index.html`,
-o `qbittorrent-nox` volta sozinho para a WebUI padrão.
-
-### Segurança
-
-Com uma WebUI alternativa o qBittorrent **deixa de enviar** o cabeçalho
-`Content-Security-Policy` (e `Cross-Origin-Opener-Policy`/`Referrer-Policy`). Para manter a
-mesma proteção da WebUI padrão, ative **Add custom HTTP headers** com:
+How it is put together:
 
 ```
-Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; object-src 'none'; form-action 'self'; frame-src 'self' blob:; frame-ancestors 'self';
-Cross-Origin-Opener-Policy: same-origin
-Referrer-Policy: same-origin
+official WebUI (sparse clone of src/webui/www at the tag)
+  + patches/*.patch          two small JS fixes, described at the top of each file
+  + theme/hazard-glass.css   appended to style.css (dialogs are iframes that
+                             load style.css only, so they get the theme too)
+  = dist/webui/
 ```
 
-## Atualizar para uma versão nova do qBittorrent
+When a new qBittorrent release changes the patched lines, the build stops and
+names the patch that needs updating.
 
-1. `tools/build.sh <nova-tag>`.
-2. Se um patch não aplicar, o build para e diz qual: refaça só aquele trecho.
-3. Teste (lista, painel da direita, diálogos, Opções) e só então troque `QBT_TAG`.
+## Contributing
 
-## Licença
+Read [docs/design.md](docs/design.md) first. The one hard rule: the stylesheet
+must not change any **size** (margin, padding, border width, height,
+font-size, display). The WebUI's layout engine (MochaUI) computes panel heights
+in JavaScript, and any difference makes one panel swallow the other.
 
-GPL-2.0-or-later, como a WebUI do qBittorrent da qual deriva (ver `LICENSE`).
+## Credits
+
+The look is inspired by the *Acrylic* and *Hazard* styles of the
+ps5-homebrew-ui project. Built on the qBittorrent WebUI.
+
+## License
+
+GPL-2.0-or-later, like the qBittorrent WebUI it is built from. See
+[LICENSE](LICENSE).

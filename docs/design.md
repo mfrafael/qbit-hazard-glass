@@ -1,46 +1,56 @@
-# Hazard Glass — design
+# Design notes
 
-## Por quê
+## Goal
 
-A WebUI é a única interface usada no dia a dia, aberta pelo navegador em vários PCs.
-O uso é curto: bater o olho pra ver se está tudo bem, adicionar torrent, ajustar categoria
-e tag, às vezes filtrar os ativos. O tema existe para deixar isso mais agradável e mais
-legível de relance, sem perder nenhuma função da WebUI original.
+Make the qBittorrent WebUI pleasant and readable at a glance, without losing a
+single feature of the stock WebUI and without becoming a fork that is hard to
+update.
 
-## Decisões
+## Look
 
-- **Visual:** base *Acrylic* (vidro fosco sobre fundo escuro com manchas de cor
-  desfocadas) com toques *Hazard* (cantos cortados, rótulos em maiúsculas espaçadas, brilho
-  só onde há dado vivo). Duas cores com papel fixo: **âmbar = ações/foco**,
-  **ciano = dados**. Sempre escuro.
-- **Layout:** filtros à esquerda, lista no centro, detalhes do torrent no **painel de
-  baixo, como na WebUI original** (recolhível clicando na aba ativa). As 5 abas originais
-  ficam. *Histórico:* a 0.1.0 pôs os detalhes numa coluna larga à direita (estilo
-  *File Browser*); no uso real a lista perdeu quase todas as colunas (só cabia até
-  "Down Speed") e o Conteúdo cortava a Prioridade — a lista precisa da largura toda,
-  então voltamos ao painel de baixo.
-- **Sem faixa Pulse** (desde a 0.4.0). A 0.1.0 tinha uma faixa no topo com velocidades,
-  ratio, espaço livre e contagem por estado; no uso ela repetia o que a barra de status
-  já mostra e tirava ~5 linhas da lista, então saiu. Com ela saíram o JS próprio e o
-  patch no `client.js` — o tema ficou só CSS + o patch de cores da barra de peças.
-- Referências: galeria ps5-homebrew-ui (design *File Browser*, temas
-  *Acrylic*, *Hazard*, *Fresh*).
+- Base *Acrylic*: translucent panels (`backdrop-filter`) over a near-black
+  backdrop with soft colour blobs and a faint dot grid.
+- *Hazard* accents: uppercase, letter-spaced labels; glow only where there is
+  live data.
+- Two colours with fixed roles: **amber = actions and focus** (buttons, selected
+  tab, hovered controls), **cyan = data** (progress, selection, pieces).
+- Always dark: the theme remaps the stock CSS variables for both the light and
+  the dark scheme.
 
-## Abordagens consideradas
+## How it is built
 
-| | Abordagem | Troca |
+| | Approach | Trade-off |
 |---|---|---|
-| **A (escolhida)** | Reformar a WebUI oficial: cópia da versão alvo + CSS do tema + patches pequenos | Mantém 100% das funções; custo de reaplicar a cada versão, controlado pelo `tools/build.sh` |
-| B | UI do zero só pela API | Liberdade total; reimplementar tudo (Opções têm centenas de campos) |
-| C | Retematizar uma UI pronta (VueTorrent) | Herda funções; brigar com o design deles e depender de outro projeto |
+| **Chosen** | Official WebUI + appended stylesheet + minimal patches | Every feature keeps working; the patches need a check on each qBittorrent release, and `tools/build.sh` fails loudly when one no longer applies |
+| Rejected | New UI from scratch on the Web API | Full freedom, but everything has to be rewritten (Options alone has hundreds of fields) |
+| Rejected | Re-skin an existing alternative UI | Inherits features, but fights someone else's design and release cycle |
 
-## Regras de implementação
+## Rules
 
-- Patches mínimos e marcados com `Hazard Glass` no código; todo o resto em arquivos do tema.
-- Não alterar margin/padding/width de colunas e painéis do MochaUI (tamanhos são calculados
-  em JS); o visual vem de fundo, borda, sombra e `clip-path`.
-- O CSP que a WebUI padrão envia é reposto via cabeçalhos customizados na instalação.
+1. **No geometry in the stylesheet.** MochaUI sizes columns and panels in
+   JavaScript and gives any leftover height to the tallest panel. A theme that
+   changes padding, borders, font sizes or `display` made the properties panel
+   open covering the whole list (or vanish). Colours, backgrounds, shadows and
+   `clip-path` only.
+2. **Specificity, not `!important`.** Everything after the tokens is nested in
+   `:root { }`, because `Layout.css`, `Window.css` and `Tabs.css` load after
+   `style.css`.
+3. **Patches stay tiny** and are marked `Hazard Glass` in the code, with a
+   description at the top of each patch file.
+4. **Nothing external.** No web fonts, CDNs or images, so the stock
+   `Content-Security-Policy` keeps working (see the README).
 
-## Não-objetivos (por agora)
+## Things that were tried and dropped
 
-Tela de login temática, celular, traduções compiladas (`.qm`) — ver `BACKLOG.md`.
+- Properties in a wide **right-hand column**: the torrent list lost most of its
+  columns and the Content tab hid the priority. The stock bottom panel stays.
+- A **summary strip** on top (speeds, ratio, free space, counts): it repeated
+  the status bar and cost about five rows of the list.
+
+## Not done yet
+
+- Login page (`public/`) keeps the stock look.
+- Compiled translations: an alternative WebUI reads
+  `translations/webui_<locale>.qm`, which the build does not produce yet
+  (needs `lrelease`). English works out of the box.
+- Narrow screens / phones.
