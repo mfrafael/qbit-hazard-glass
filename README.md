@@ -82,7 +82,7 @@ names the patch that needs updating.
 
 ## Demo mode
 
-Try the theme, or work on it, without a qBittorrent instance:
+Try the theme without a qBittorrent instance:
 
 ```sh
 tools/build.sh
@@ -92,13 +92,6 @@ node tools/demo/server.mjs          # http://127.0.0.1:8099/
 It serves `dist/webui` with a fake, read-only Web API full of Linux ISOs
 (Node 18+, no dependencies). `HOST=0.0.0.0` makes it reachable from other
 machines. The screenshots in this README come from it.
-
-## Contributing
-
-Read [docs/design.md](docs/design.md) first. The one hard rule: the stylesheet
-must not change any **size** (margin, padding, border width, height,
-font-size, display). The WebUI's layout engine (MochaUI) computes panel heights
-in JavaScript, and any difference makes one panel swallow the other.
 
 ## Credits
 
