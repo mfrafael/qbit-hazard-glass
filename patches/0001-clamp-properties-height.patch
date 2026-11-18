@@ -1,0 +1,17 @@
+diff -ruN a/private/scripts/client.js b/private/scripts/client.js
+--- a/private/scripts/client.js	2026-11-18 06:00:52.663120912 +0000
++++ b/private/scripts/client.js	2026-11-18 06:00:52.676774215 +0000
+@@ -1783,8 +1783,11 @@
+         height: null
+     });
+     let prop_h = localPreferences.get("properties_height_rel");
+-    if (prop_h !== null)
+-        prop_h = Number(prop_h) * Window.getSize().y;
++    if (prop_h !== null) {
++        // Hazard Glass: a saved height near 1 made the panel swallow the list on every load
++        const rel = Number(prop_h);
++        prop_h = ((rel > 0) ? Math.min(rel, 0.6) : 0.5) * Window.getSize().y;
++    }
+     else
+         prop_h = Window.getSize().y / 2;
+     new MochaUI.Panel({
