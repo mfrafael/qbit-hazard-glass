@@ -11,7 +11,7 @@ por cabeçalho, e o `tools/build.sh` capaz de remontar sobre uma versão nova do
 - [x] Menus de contexto (botão direito) e diálogo de adicionar torrent — ok no uso real
 - [ ] Conferir o resto quando usar: Opções, renomear/mover, Search, RSS, Log, Estatísticas
 - [x] Barras de peças/disponibilidade (patch 0002): âmbar baixando, ciano completo
-- [ ] Ícones da toolbar/filtros: avaliar se combinam ou se trocamos por um conjunto próprio
+- [x] Ícones coloridos da original e seleção em ciano suave: avaliados, ficam como estão (18/11)
 - [x] Repor CSP/COOP/Referrer-Policy por cabeçalho customizado na instalação
 
 ## Depois
@@ -21,4 +21,5 @@ por cabeçalho, e o `tools/build.sh` capaz de remontar sobre uma versão nova do
 - [ ] Layout em tela estreita / celular
 
 ## Ideias soltas
-- Ícones Material Round do Nightseed (MIT/Apache-2.0) mapeiam 78/87 nomes da WebUI
+- Se um dia quiser trocar os ícones: os Material Round do Nightseed (MIT/Apache-2.0)
+  mapeiam 78/87 nomes da WebUI
