@@ -98,10 +98,14 @@ body:has(#desktop)::after {
 }
 
 /* ---------- topo: menu + toolbar ---------- */
+/* o backdrop-filter cria um contexto de empilhamento: sem z-index, os menus
+   suspensos (File/Edit/View…) ficavam presos nele, por baixo das colunas */
 #desktopHeader {
     background: rgb(7 9 15 / 55%);
     backdrop-filter: blur(18px);
     border-bottom: 1px solid var(--hg-line);
+    position: relative;
+    z-index: 100;
 }
 
 #desktopNavbar {
