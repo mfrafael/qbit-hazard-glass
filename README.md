@@ -4,6 +4,8 @@ A dark theme for the qBittorrent WebUI: frosted-glass panels over a deep
 blue/teal backdrop, sci-fi console accents, **amber for actions and focus**,
 **cyan for data**.
 
+![Hazard Glass: torrent list and General tab, demo data](docs/screenshot.png)
+
 It is not a new WebUI. It is the **official WebUI** of a given qBittorrent
 release with a stylesheet on top and two tiny JS patches, so every feature keeps
 working: adding torrents, context menus, categories and tags, Options, RSS,
@@ -77,6 +79,19 @@ official WebUI (sparse clone of src/webui/www at the tag)
 
 When a new qBittorrent release changes the patched lines, the build stops and
 names the patch that needs updating.
+
+## Demo mode
+
+Try the theme, or work on it, without a qBittorrent instance:
+
+```sh
+tools/build.sh
+node tools/demo/server.mjs          # http://127.0.0.1:8099/
+```
+
+It serves `dist/webui` with a fake, read-only Web API full of Linux ISOs
+(Node 18+, no dependencies). `HOST=0.0.0.0` makes it reachable from other
+machines. The screenshots in this README come from it.
 
 ## Contributing
 

@@ -8,6 +8,7 @@ First public release, for qBittorrent 5.3.0.
 - Dark frosted-glass theme for the whole WebUI, dialogs included.
 - Pieces and availability bars in the theme colours.
 - `tools/build.sh` builds the theme for any qBittorrent release and packs a zip.
+- Demo mode (`tools/demo/server.mjs`): the themed WebUI with fake Linux ISO data, no qBittorrent needed.
 
 ### Fixed
 - The properties panel no longer opens covering the whole torrent list.
