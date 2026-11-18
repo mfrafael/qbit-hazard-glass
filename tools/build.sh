@@ -35,10 +35,12 @@ for p in "$ROOT"/patches/*.patch; do
 done
 
 # 4. Arquivos do tema por cima
-#    - theme/private/** é copiado (ex.: scripts/hazard-glass.js)
+#    - theme/private/** (se existir) é copiado por cima
 #    - o CSS do tema é ANEXADO ao style.css: os diálogos são iframes que
 #      carregam só o style.css, então assim todas as janelas pegam o tema
-cp -r "$ROOT/theme/private/." "$OUT/private/"
+if [[ -d "$ROOT/theme/private" ]]; then
+    cp -r "$ROOT/theme/private/." "$OUT/private/"
+fi
 cat "$ROOT/theme/hazard-glass.css" >> "$OUT/private/css/style.css"
 
 # 5. Marca de versão

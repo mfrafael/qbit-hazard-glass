@@ -19,9 +19,11 @@ legível de relance, sem perder nenhuma função da WebUI original.
   *File Browser*); no uso real a lista perdeu quase todas as colunas (só cabia até
   "Down Speed") e o Conteúdo cortava a Prioridade — a lista precisa da largura toda,
   então voltamos ao painel de baixo.
-- **Faixa Pulse** no topo (influência do *Pulse Dashboard*): download e upload com
-  mini-gráfico, ratio global, espaço livre + conexão, contagem por estado.
-- Referências: galeria ps5-homebrew-ui (designs *File Browser* e *Pulse Dashboard*, temas
+- **Sem faixa Pulse** (desde a 0.4.0). A 0.1.0 tinha uma faixa no topo com velocidades,
+  ratio, espaço livre e contagem por estado; no uso ela repetia o que a barra de status
+  já mostra e tirava ~5 linhas da lista, então saiu. Com ela saíram o JS próprio e o
+  patch no `client.js` — o tema ficou só CSS + o patch de cores da barra de peças.
+- Referências: galeria ps5-homebrew-ui (design *File Browser*, temas
   *Acrylic*, *Hazard*, *Fresh*).
 
 ## Abordagens consideradas
@@ -37,7 +39,6 @@ legível de relance, sem perder nenhuma função da WebUI original.
 - Patches mínimos e marcados com `Hazard Glass` no código; todo o resto em arquivos do tema.
 - Não alterar margin/padding/width de colunas e painéis do MochaUI (tamanhos são calculados
   em JS); o visual vem de fundo, borda, sombra e `clip-path`.
-- A faixa Pulse só **lê** dados que o `client.js` já busca (eventos `hazardglass:*`).
 - O CSP que a WebUI padrão envia é reposto via cabeçalhos customizados na instalação.
 
 ## Não-objetivos (por agora)
