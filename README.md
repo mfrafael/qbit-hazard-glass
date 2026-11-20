@@ -1,8 +1,12 @@
 # Hazard Glass
 
-A dark theme for the qBittorrent WebUI: frosted-glass panels over a deep
-blue/teal backdrop, sci-fi console accents, **amber for actions and focus**,
-**cyan for data**.
+A dark theme for the qBittorrent WebUI: frosted-glass panels, sci-fi console
+accents, **amber for actions and focus**, **cyan for data**.
+
+Two backdrops, same theme:
+
+- **Blue**: deep navy with soft blue/teal glows.
+- **Purple**: deep purple with a blue → magenta → red glow along the bottom.
 
 ![Hazard Glass: torrent list and General tab, demo data](docs/screenshot.png)
 
@@ -19,7 +23,7 @@ yet. Other languages show the English text.
 
 ## Install
 
-1. Download `hazard-glass-<version>-release-<qbt>.zip` from
+1. Download `hazard-glass-<version>-<blue|purple>-release-<qbt>.zip` from
    [Releases](../../releases), matching your qBittorrent version.
 2. Unzip it somewhere the qBittorrent user can read, e.g. `/opt/hazard-glass/`.
 3. In **Tools → Options → WebUI**, tick **Use alternative WebUI** and point
@@ -62,12 +66,13 @@ images.
 ## Build it yourself
 
 ```sh
-tools/build.sh                  # qBittorrent version in QBT_TAG
-tools/build.sh release-5.4.0    # any other qBittorrent release tag
+tools/build.sh                         # Blue, qBittorrent version in QBT_TAG
+VARIANT=purple tools/build.sh          # Purple
+tools/build.sh release-5.4.0           # any other qBittorrent release tag
 ```
 
 Needs `bash`, `git` and `patch` (`zip` or `python3` for the release archive).
-Output: `dist/webui/` and `dist/hazard-glass-<version>-<tag>.zip`.
+Output: `dist/webui/` and `dist/hazard-glass-<version>-<variant>-<tag>.zip`.
 
 How it is put together:
 
@@ -76,6 +81,7 @@ official WebUI (sparse clone of src/webui/www at the tag)
   + patches/*.patch          two small JS fixes, described at the top of each file
   + theme/hazard-glass.css   appended to style.css (dialogs are iframes that
                              load style.css only, so they get the theme too)
+  + theme/variants/*.css     the chosen backdrop, appended after it (Purple)
   = dist/webui/
 ```
 
@@ -91,7 +97,7 @@ tools/build.sh
 node tools/demo/server.mjs          # http://127.0.0.1:8099/
 ```
 
-It serves `dist/webui` with a fake, read-only Web API full of Linux ISOs
+It serves `dist/webui` (the variant you built last) with a fake, read-only Web API full of Linux ISOs
 (Node 18+, no dependencies). `HOST=0.0.0.0` makes it reachable from other
 machines. The screenshots in this README come from it.
 

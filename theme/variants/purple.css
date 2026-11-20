@@ -1,0 +1,18 @@
+
+/* ===================================================================== */
+/* Variant: Purple. Deep purple with a blue → magenta → red glow along   */
+/* the bottom edge. Appended after hazard-glass.css; only the backdrop   */
+/* changes.                                                              */
+/* ===================================================================== */
+:root:not(.dark),
+:root.dark {
+    --hg-bg: #0e0219;
+}
+
+:root {
+    body:has(#desktop)::before {
+        background: linear-gradient(90deg, #0580c1 0%, #205fbe 25%, #442dac 38%, #6e0491 52%, #9a026d 64%, #b60253 78%, #be0241 100%);
+        mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 45%) 12%, rgb(0 0 0 / 12%) 22%, transparent 32%);
+        opacity: 1;
+    }
+}

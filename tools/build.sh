@@ -3,20 +3,28 @@
 #   official qBittorrent WebUI (from a release tag)
 #   + patches/*.patch        (small JS fixes)
 #   + theme/hazard-glass.css (appended to style.css)
+#   + theme/variants/<variant>.css, unless the variant is "blue"
 #
-# Usage:   tools/build.sh [tag]      default: the tag in QBT_TAG
+# Usage:   [VARIANT=blue|purple] tools/build.sh [tag]
+#          default variant: blue; default tag: the one in QBT_TAG
 # Output:  dist/webui/                folder for "Use alternative WebUI"
-#          dist/hazard-glass-<version>-<tag>.zip  (same folder, zipped)
+#          dist/hazard-glass-<version>-<variant>-<tag>.zip  (same folder, zipped)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TAG="${1:-$(<"$ROOT/QBT_TAG")}"
 VERSION="$(<"$ROOT/VERSION")"
+VARIANT="${VARIANT:-blue}"
 
 # The tag becomes part of a path that is deleted with rm -rf: accept only
 # plain release names such as release-5.3.0.
 if [[ ! "$TAG" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
     echo "error: invalid tag '$TAG' (expected something like release-5.3.0)" >&2
+    exit 1
+fi
+
+if [[ ! "$VARIANT" =~ ^[a-z0-9-]+$ ]] || [[ "$VARIANT" != blue && ! -f "$ROOT/theme/variants/$VARIANT.css" ]]; then
+    echo "error: unknown variant '$VARIANT' (blue, or a file in theme/variants/)" >&2
     exit 1
 fi
 
@@ -53,10 +61,13 @@ done
 # 4. Theme. Appended to style.css instead of linked from index.html because
 #    the dialogs are iframes that load style.css only.
 cat "$ROOT/theme/hazard-glass.css" >> "$OUT/private/css/style.css"
-printf 'Hazard Glass %s for qBittorrent %s\n' "$VERSION" "$TAG" > "$OUT/HAZARD_GLASS"
+if [[ "$VARIANT" != blue ]]; then
+    cat "$ROOT/theme/variants/$VARIANT.css" >> "$OUT/private/css/style.css"
+fi
+printf 'Hazard Glass %s (%s) for qBittorrent %s\n' "$VERSION" "$VARIANT" "$TAG" > "$OUT/HAZARD_GLASS"
 
 # 5. Release zip (zip or python3; skipped if neither is installed)
-ZIP="$DIST/hazard-glass-$VERSION-$TAG.zip"
+ZIP="$DIST/hazard-glass-$VERSION-$VARIANT-$TAG.zip"
 rm -f "$ZIP"
 if command -v zip >/dev/null; then
     (cd "$DIST" && zip -qr "$ZIP" webui)
