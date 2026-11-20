@@ -283,6 +283,12 @@ ul.filterList span.link:hover {
     color: var(--hg-text);
 }
 
+/* torrents that are not moving data (stalled, stopped, queued) fade back,
+   so the ones downloading or uploading stand out; hover or select to read */
+#torrentsTableDiv tbody tr:not(.selected, :hover):has(.stateStalledUP, .stateStalledDL, .stateStoppedUP, .stateStoppedDL, .stateQueued) {
+    color: var(--hg-muted);
+}
+
 .dynamicTableDiv table.dynamicTable tbody tr.selected {
     background: var(--hg-cyan-soft);
     box-shadow: inset 2px 0 0 var(--hg-cyan);
