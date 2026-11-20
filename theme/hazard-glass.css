@@ -63,7 +63,7 @@ body {
     color: var(--hg-text);
 }
 
-/* main page: soft colour blobs + dot grid (dialogs keep a plain background) */
+/* main page: soft colour blobs (dialogs keep a plain background) */
 body:has(#desktop) {
     background: var(--hg-bg);
 }
@@ -76,16 +76,6 @@ body:has(#desktop)::before {
     content: "";
     inset: 0;
     opacity: 0.38;
-    pointer-events: none;
-    position: fixed;
-    z-index: 0;
-}
-
-body:has(#desktop)::after {
-    background-image: radial-gradient(rgb(255 210 63 / 11%) 1.1px, transparent 1.3px);
-    background-size: 22px 22px;
-    content: "";
-    inset: 0;
     pointer-events: none;
     position: fixed;
     z-index: 0;
