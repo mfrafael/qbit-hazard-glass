@@ -13,10 +13,7 @@
 /* ---------- tokens ---------- */
 :root:not(.dark),
 :root.dark {
-    --hg-bg: #07090f;
-    --hg-blob-1: #2b3bd6;
-    --hg-blob-2: #0e6f8a;
-    --hg-blob-3: #6b4a0a;
+    --hg-bg: #0e0219;
     --hg-panel: rgb(255 255 255 / 4.5%);
     --hg-popup: #111622;
     --hg-line: rgb(160 190 230 / 20%);
@@ -63,19 +60,17 @@ body {
     color: var(--hg-text);
 }
 
-/* main page: soft colour blobs (dialogs keep a plain background) */
+/* main page: deep purple with a blue → magenta → red glow along the bottom
+   (dialogs keep a plain background) */
 body:has(#desktop) {
     background: var(--hg-bg);
 }
 
 body:has(#desktop)::before {
-    background:
-        radial-gradient(40vmax 40vmax at 8% 0%, var(--hg-blob-1), transparent 60%),
-        radial-gradient(45vmax 45vmax at 100% 35%, var(--hg-blob-2), transparent 60%),
-        radial-gradient(35vmax 35vmax at 45% 110%, var(--hg-blob-3), transparent 60%);
+    background: linear-gradient(90deg, #0580c1 0%, #205fbe 25%, #442dac 38%, #6e0491 52%, #9a026d 64%, #b60253 78%, #be0241 100%);
     content: "";
     inset: 0;
-    opacity: 0.38;
+    mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 45%) 12%, rgb(0 0 0 / 12%) 22%, transparent 32%);
     pointer-events: none;
     position: fixed;
     z-index: 0;
