@@ -263,7 +263,7 @@ ul.filterList span.link:hover {
 }
 
 .dynamicTable th {
-    background: transparent;
+    background-color: transparent;
     border-color: var(--hg-hair);
     color: var(--hg-muted);
     font-weight: 700;
