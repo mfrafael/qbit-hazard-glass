@@ -345,6 +345,14 @@ textarea {
     color: var(--hg-text);
 }
 
+/* the native drop-down list takes the select's (translucent) background:
+   give the options a solid one so they stay readable */
+option,
+optgroup {
+    background-color: var(--hg-popup);
+    color: var(--hg-text);
+}
+
 input:focus,
 select:focus,
 textarea:focus {
