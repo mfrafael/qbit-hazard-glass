@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0
+
+### Added
+- Purple variant: deep purple with a blue → magenta → red glow along the bottom. Each release now has a Blue and a Purple zip.
+- Idle torrents (stalled, stopped, queued) are greyed out in the list.
+
+### Fixed
+- The sort arrow no longer repeats across the sorted column header.
+- Drop-down lists (like the category picker) are readable.
+
+### Minor changes
+- No more dot grid on the page background.
+- Demo mode shows torrents in every state and can serve both variants at once.
+
 ## 1.0.0
 
 First public release, for qBittorrent 5.3.0.

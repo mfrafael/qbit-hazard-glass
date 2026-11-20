@@ -8,7 +8,9 @@ Two backdrops, same theme:
 - **Blue**: deep navy with soft blue/teal glows.
 - **Purple**: deep purple with a blue → magenta → red glow along the bottom.
 
-![Hazard Glass: torrent list and General tab, demo data](docs/screenshot.png)
+![Hazard Glass, Blue: torrent list and Content tab, demo data](docs/screenshot-blue.png)
+
+![Hazard Glass, Purple: the same view with the Purple backdrop](docs/screenshot-purple.png)
 
 It is not a new WebUI. It is the **official WebUI** of a given qBittorrent
 release with a stylesheet on top and two tiny JS patches, so every feature keeps
@@ -97,9 +99,11 @@ tools/build.sh
 node tools/demo/server.mjs          # http://127.0.0.1:8099/
 ```
 
-It serves `dist/webui` (the variant you built last) with a fake, read-only Web API full of Linux ISOs
-(Node 18+, no dependencies). `HOST=0.0.0.0` makes it reachable from other
-machines. The screenshots in this README come from it.
+It serves `dist/webui` (the variant you built last) with a fake, read-only
+Web API full of Linux ISOs, with torrents in every state (Node 18+, no
+dependencies). `HOST=0.0.0.0` makes it reachable from other machines, and
+`WEBUI=<folder>` serves another build, so both variants can run side by side
+on different `PORT`s. The screenshots in this README come from it.
 
 ## Credits
 

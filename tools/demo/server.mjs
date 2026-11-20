@@ -4,6 +4,7 @@
 //
 //   tools/build.sh && node tools/demo/server.mjs
 //   PORT=8099 HOST=0.0.0.0 node tools/demo/server.mjs   (reachable from the LAN)
+//   WEBUI=/path/to/webui node tools/demo/server.mjs     (serve another build, e.g. a second variant)
 //
 // Read-only and stateless: actions such as "pause" answer OK and change nothing.
 // No dependencies; Node 18+.
@@ -18,7 +19,7 @@ import { PREFERENCE_KEYS } from "./preference-keys.mjs";
 
 const HOST = process.env.HOST ?? "127.0.0.1";
 const PORT = Number(process.env.PORT ?? 8099);
-const WEBUI = resolve(fileURLToPath(new URL("../../dist/webui", import.meta.url)));
+const WEBUI = resolve(process.env.WEBUI ?? fileURLToPath(new URL("../../dist/webui", import.meta.url)));
 const GiB = 1024 ** 3;
 const START = Math.floor(Date.now() / 1000);
 
@@ -45,8 +46,8 @@ const torrents = TORRENTS.map(([name, sizeGiB, category, tags, state, progress, 
 const byHash = new Map(torrents.map((t) => [t.hash, t]));
 
 const speeds = (t) => {
-    const dl = (t.state === "downloading") ? wave(t.i, 2e6, 14e6) : 0;
-    const up = ["downloading", "uploading"].includes(t.state) ? wave(t.i + 9, 1e5, 2.5e6) : 0;
+    const dl = ["downloading", "forcedDL"].includes(t.state) ? wave(t.i, 2e6, 14e6) : 0;
+    const up = ["downloading", "forcedDL", "uploading", "forcedUP"].includes(t.state) ? wave(t.i + 9, 1e5, 2.5e6) : 0;
     return { dl, up };
 };
 
@@ -62,8 +63,8 @@ const torrentInfo = (t) => {
         connections_count: dl || up ? 18 : 0, connections_limit: 100,
         content_path: `/downloads/${t.category}/${t.name}`, created_by: "", creation_date: t.addedOn - 86400,
         dl_limit: 0, dlspeed: dl, download_path: "", downloaded: done, downloaded_session: dl ? done / 3 : 0,
-        eta: dl ? Math.round((t.size - done) / dl) : 8640000, f_l_piece_prio: false, force_start: false,
-        has_metadata: true, has_other_announce_error: false, has_tracker_error: false, has_tracker_warning: false,
+        eta: dl ? Math.round((t.size - done) / dl) : 8640000, f_l_piece_prio: false, force_start: t.state.startsWith("forced"),
+        has_metadata: t.state !== "metaDL", has_other_announce_error: false, has_tracker_error: false, has_tracker_warning: false,
         inactive_seeding_time_limit: -2, infohash_v1: t.hash, infohash_v2: "",
         last_activity: START - (t.i * 600), magnet_uri: `magnet:?xt=urn:btih:${t.hash}`,
         max_inactive_seeding_time: -1, max_ratio: -1, max_seeding_time: -1, name: t.name,
